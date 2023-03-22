@@ -18,13 +18,17 @@ namespace IDZ3.Agents.Store
             lessProductAmounts = reserves;
         }
 
+        // Поведение склада
         new public void Action()
         {
             Lock();
+
+            // Ждем новых запросов
             Message<StoreRecieveMessage> recievedMessage = GetMessage<StoreRecieveMessage>();
 
             switch ( recievedMessage.MessageContent.ActionType ) {
 
+                // Пришел запрос на наличие продукта
                 case ( StoreActionTypes.CHECK_PRODUCT ):
                     double lessAmount = lessProductAmounts[ recievedMessage.MessageContent.ProductType ];
 
@@ -39,6 +43,7 @@ namespace IDZ3.Agents.Store
 
                     break;
 
+                // Пришел запрос на резервирование продукта
                 case ( StoreActionTypes.RESERVE_PRODUCT ):
                     ProductAgent productAgent = AgentFabric.ProductAgentCreate(
                         Id,
@@ -56,15 +61,18 @@ namespace IDZ3.Agents.Store
                     activeProductAgents[ recievedMessage.MessageContent.DishAgentId ].Add( productAgent );
                     break;
 
+                // Блюдо готово!
                 case ( StoreActionTypes.DISH_READY ):
                     activeProductAgents.Remove( recievedMessage.MessageContent.DishAgentId );
                     break;
 
+                // Отмена бронирования продукта
                 case ( StoreActionTypes.CANCEL_PRODUCT ):
                     ProductAgent cancalledProduct = activeProductAgents[ recievedMessage.MessageContent.DishAgentId ].First(
                         pa => pa.GetType() == recievedMessage.MessageContent.ProductType 
                     );
 
+                    activeProductAgents[ recievedMessage.MessageContent.DishAgentId ].Remove( cancalledProduct );
                     lessProductAmounts[ recievedMessage.MessageContent.ProductType ] += recievedMessage.MessageContent.ProductAmount;
                     cancalledProduct.SelfDestruct();
 

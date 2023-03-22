@@ -1,5 +1,6 @@
 ﻿namespace IDZ3.Agents.Store
 {
+    // Возможные действия агента склада
     public enum StoreActionTypes
     {
         CHECK_PRODUCT = 0,
@@ -8,6 +9,7 @@
         CANCEL_PRODUCT = 3
     }
 
+    // Агент склада принимает файлы в таком формате
     public class StoreRecieveMessage
     {
         public StoreActionTypes ActionType { get; set; }

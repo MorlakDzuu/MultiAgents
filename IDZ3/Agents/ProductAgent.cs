@@ -5,7 +5,9 @@ namespace IDZ3.Agents
     // Агент продукта
     public class ProductAgent : BaseAgent
     {
+        // Тип продукта
         string _productType;
+        // Объем продукта
         double _productAmount;
 
         public ProductAgent(
@@ -19,6 +21,7 @@ namespace IDZ3.Agents
             _productAmount = productAmount;
         }
         
+        // Продукт просто существует
         new public void Action()
         {
             Lock();
@@ -26,16 +29,19 @@ namespace IDZ3.Agents
             Unlock();
         }
 
+        // Получить тип продукта
         public string GetType()
         {
             return _productType;
         }
 
+        // Установить новый объем продукта
         public void SetAmount( double productAmount )
         {
             _productAmount = productAmount;
         }
-
+        
+        // Получить текущий объем продукта
         public double GetAmount()
         {
             return _productAmount;

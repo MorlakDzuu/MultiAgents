@@ -5,15 +5,19 @@ using IDZ3.Services.AgentFabric;
 
 namespace IDZ3.Agents.Admin
 {
+    // Управляющий агент
     public class AdminAgent : BaseAgent
     {
+        // Агент склада, принадлежащий управляющему агенту
         StoreAgent _storeAgent;
 
         public AdminAgent() : base( "ADMIN", "head" )
         {
+            // Создаем агент склада
             _storeAgent = AgentFabric.StoreAgentCreate( Id );
         }
 
+        // Поведение управляющего агента
         new public void Action()
         {
             Lock();
@@ -30,6 +34,15 @@ namespace IDZ3.Agents.Admin
 
             messageContent.ActionType = StoreActionTypes.CANCEL_PRODUCT;
             SendMessageToAgent<StoreRecieveMessage>( messageContent, _storeAgent.Id );
+
+            messageContent.ActionType = StoreActionTypes.RESERVE_PRODUCT;
+            SendMessageToAgent<StoreRecieveMessage>( messageContent, _storeAgent.Id );
+
+            StoreRecieveMessage reserseTea = new StoreRecieveMessage( StoreActionTypes.RESERVE_PRODUCT, "TEA", 2, "test" );
+            SendMessageToAgent<StoreRecieveMessage>( reserseTea, _storeAgent.Id );
+
+            StoreRecieveMessage ready = new StoreRecieveMessage( StoreActionTypes.DISH_READY, "", 0, "test" );
+            SendMessageToAgent<StoreRecieveMessage>( ready, _storeAgent.Id );
 
             StopWorking();
             Unlock();
