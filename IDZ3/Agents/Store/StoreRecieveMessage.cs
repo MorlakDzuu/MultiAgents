@@ -2,24 +2,29 @@
 {
     public enum StoreActionTypes
     {
-        CHECK = 0,
-        RESERVE = 1
+        CHECK_PRODUCT = 0,
+        RESERVE_PRODUCT = 1,
+        DISH_READY = 2,
+        CANCEL_PRODUCT = 3
     }
 
     public class StoreRecieveMessage
     {
-        public StoreActionTypes Type { get; set; }
-        public string ProductName { get; set; }
+        public StoreActionTypes ActionType { get; set; }
+        public string ProductType { get; set; }
         public double ProductAmount { get; set; }
+        public string DishAgentId { get; set; }
 
         public StoreRecieveMessage(
-            StoreActionTypes type,
-            string productName,
-            double productAmount )
+            StoreActionTypes actionType,
+            string productType,
+            double productAmount,
+            string dishAgentId )
         {
-            Type = type;
-            ProductName = productName;
+            ActionType = actionType;
+            ProductType = productType;
             ProductAmount = productAmount;
+            DishAgentId = dishAgentId;
         }
     }
 }

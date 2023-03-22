@@ -8,9 +8,15 @@ namespace IDZ3.Agents
         string _productType;
         double _productAmount;
 
-        public ProductAgent( string ownerId, string productType ) : base( "PRODUCT", ownerId )
+        public ProductAgent(
+            string ownerId,
+            string productType,
+            double productAmount )
+            : base( "PRODUCT", ownerId )
         {
             _productType = productType;
+            _productAmount = productAmount;
+            _productAmount = productAmount;
         }
         
         new public void Action()
@@ -18,6 +24,11 @@ namespace IDZ3.Agents
             Lock();
             Thread.Sleep( 100 );
             Unlock();
+        }
+
+        public string GetType()
+        {
+            return _productType;
         }
 
         public void SetAmount( double productAmount )

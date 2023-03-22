@@ -25,6 +25,10 @@ namespace IDZ3.Agents.Base
              mre = new ManualResetEvent( true );
             _mailService = MailService.GetInstance();
             _mailService.RegisterAgentMail( Id );
+
+            // ---
+            Console.WriteLine( $"Created agent: name = {Name}, id = {Id}, owner_id = {OwnerId}\n\n" );
+            // ---
         }
 
         ~BaseAgent()
@@ -59,6 +63,11 @@ namespace IDZ3.Agents.Base
         public void SelfDestruct()
         {
             Lock();
+
+            // ---
+            Console.WriteLine( $"Destroy agent: name = {Name}, id = {Id}, owner_id = {OwnerId}\n\n" );
+            // ---
+
             Interlocked.Exchange( ref _done, 1 );
             Unlock();
         }

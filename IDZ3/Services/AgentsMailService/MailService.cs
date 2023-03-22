@@ -9,12 +9,14 @@ namespace IDZ3.Services.AgentsMailService
 
         private static MailService malServiceinstance;
         private static object locker = new();
+        ManualResetEvent mre;
 
         private Dictionary<string, BlockingQueue<string>> agentsToMessages;
 
         protected MailService()
         {
             agentsToMessages = new Dictionary<string, BlockingQueue<string>>();
+            mre = new ManualResetEvent( true );
         }
 
         public static MailService GetInstance()
@@ -32,17 +34,23 @@ namespace IDZ3.Services.AgentsMailService
 
         public void RegisterAgentMail( string agentId )
         {
-            if ( !Monitor.TryEnter( locker ) )
-            {
-                Monitor.Wait( locker );
-            }
+            mre.WaitOne();
+            //if ( !Monitor.TryEnter( locker ) )
+            //{
+            //    Monitor.Wait( locker );
+            //}
 
             if ( !agentsToMessages.ContainsKey( agentId ) )
             {
                 agentsToMessages.Add( agentId, new BlockingQueue<string>( MAX_MESSAGES_FOR_AGENT_IN_QUEUE ) );
+
+                //----
+                Console.WriteLine( $"MailService: agent registered {agentId}\n\n" );
+                //----
             }
 
-            Monitor.Pulse( locker );
+            //Monitor.Pulse( locker );
+            mre.Set();
         }
 
         public Message<T> GetNextMessage<T>( string agentId )
@@ -74,23 +82,29 @@ namespace IDZ3.Services.AgentsMailService
             string messageString = JsonSerializer.Serialize( message );
             BlockingQueue<string> agentMessages = GetAgentMessages( agentId );
             agentMessages?.Enqueue( messageString );
+
+            //----
+            Console.WriteLine( $"MailService: agent {agentFromId} send a message to {agentId}, message = {messageString}\n\n" );
+            //----
         }
 
         private BlockingQueue<string> GetAgentMessages( string agentId )
         {
-            if ( !Monitor.TryEnter( locker ) )
-            {
-                Monitor.Wait( locker );
-            }
+            mre.WaitOne();
+            //if ( !Monitor.TryEnter( locker ) )
+            //{
+            //    Monitor.Wait( locker );
+            //}
 
             BlockingQueue<string>? agentMessages = agentsToMessages.GetValueOrDefault( agentId );
 
             if ( agentMessages == null )
             {
-                throw new Exception( $"Agent with id = {agentId} does not exists" );
+                throw new Exception( $"Agent with id = {agentId} does not exists\n\n" );
             }
 
-            Monitor.Pulse( locker );
+            //Monitor.Pulse( locker );
+            mre.Set();
             return agentMessages;
         }
     }
