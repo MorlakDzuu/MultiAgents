@@ -1,0 +1,17 @@
+C:\HSE\IDZ3\IDZ3\bin\Debug\net6.0\IDZ3.exe
+C:\HSE\IDZ3\IDZ3\bin\Debug\net6.0\IDZ3.deps.json
+C:\HSE\IDZ3\IDZ3\bin\Debug\net6.0\IDZ3.runtimeconfig.json
+C:\HSE\IDZ3\IDZ3\bin\Debug\net6.0\IDZ3.dll
+C:\HSE\IDZ3\IDZ3\bin\Debug\net6.0\IDZ3.pdb
+C:\HSE\IDZ3\IDZ3\obj\Debug\net6.0\IDZ3.csproj.AssemblyReference.cache
+C:\HSE\IDZ3\IDZ3\obj\Debug\net6.0\IDZ3.GeneratedMSBuildEditorConfig.editorconfig
+C:\HSE\IDZ3\IDZ3\obj\Debug\net6.0\IDZ3.AssemblyInfoInputs.cache
+C:\HSE\IDZ3\IDZ3\obj\Debug\net6.0\IDZ3.AssemblyInfo.cs
+C:\HSE\IDZ3\IDZ3\obj\Debug\net6.0\IDZ3.csproj.CoreCompileInputs.cache
+C:\HSE\IDZ3\IDZ3\obj\Debug\net6.0\IDZ3.dll
+C:\HSE\IDZ3\IDZ3\obj\Debug\net6.0\refint\IDZ3.dll
+C:\HSE\IDZ3\IDZ3\obj\Debug\net6.0\IDZ3.pdb
+C:\HSE\IDZ3\IDZ3\obj\Debug\net6.0\IDZ3.genruntimeconfig.cache
+C:\HSE\IDZ3\IDZ3\obj\Debug\net6.0\ref\IDZ3.dll
+C:\HSE\IDZ3\IDZ3\bin\Debug\net6.0\System.Reactive.dll
+C:\HSE\IDZ3\IDZ3\obj\Debug\net6.0\IDZ3.csproj.CopyComplete

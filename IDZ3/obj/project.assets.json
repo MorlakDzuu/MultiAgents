@@ -1,0 +1,118 @@
+{
+  "version": 3,
+  "targets": {
+    "net6.0": {
+      "System.Reactive/6.0.0-preview.1": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/System.Reactive.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/System.Reactive.dll": {}
+        },
+        "build": {
+          "buildTransitive/net6.0/_._": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "System.Reactive/6.0.0-preview.1": {
+      "sha512": "fGwipNRKMjjYs/EvipEgJYJVyrTEt3xkGtaLTwLaowiWlQCCtmci6j0O4hIon2Z4viYWvOcnp/VtK1yLEUI2wQ==",
+      "type": "package",
+      "path": "system.reactive/6.0.0-preview.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "build/net6.0-windows10.0.19041/_._",
+        "build/net6.0-windows7/System.Reactive.targets",
+        "build/net6.0/_._",
+        "buildTransitive/net6.0-windows10.0.19041/_._",
+        "buildTransitive/net6.0-windows7/System.Reactive.targets",
+        "buildTransitive/net6.0/_._",
+        "lib/net472/System.Reactive.dll",
+        "lib/net472/System.Reactive.xml",
+        "lib/net6.0-windows10.0.19041/System.Reactive.dll",
+        "lib/net6.0-windows10.0.19041/System.Reactive.xml",
+        "lib/net6.0/System.Reactive.dll",
+        "lib/net6.0/System.Reactive.xml",
+        "lib/netstandard2.0/System.Reactive.dll",
+        "lib/netstandard2.0/System.Reactive.xml",
+        "lib/uap10.0.18362/System.Reactive.dll",
+        "lib/uap10.0.18362/System.Reactive.pri",
+        "lib/uap10.0.18362/System.Reactive.xml",
+        "system.reactive.6.0.0-preview.1.nupkg.sha512",
+        "system.reactive.nuspec"
+      ]
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net6.0": [
+      "System.Reactive >= 6.0.0-preview.1"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\daniil.lapshin\\.nuget\\packages\\": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\HSE\\IDZ3\\IDZ3\\IDZ3.csproj",
+      "projectName": "IDZ3",
+      "projectPath": "C:\\HSE\\IDZ3\\IDZ3\\IDZ3.csproj",
+      "packagesPath": "C:\\Users\\daniil.lapshin\\.nuget\\packages\\",
+      "outputPath": "C:\\HSE\\IDZ3\\IDZ3\\obj\\",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "C:\\Users\\daniil.lapshin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net6.0"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "http://nuget.travelline.lan/nuget": {},
+        "http://nuget.travelline.lan:8081/repository/nugetv3-proxy/index.json": {}
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "projectReferences": {}
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      }
+    },
+    "frameworks": {
+      "net6.0": {
+        "targetAlias": "net6.0",
+        "dependencies": {
+          "System.Reactive": {
+            "target": "Package",
+            "version": "[6.0.0-preview.1, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}

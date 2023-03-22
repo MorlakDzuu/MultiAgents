@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "NR3ZuPuaQpQOxZha7L7IHxVcwmTCTIdo8jB3oNPraImjYIvR5pEjLy+pCx5YFErp7aZrFpZZPpqHE0jfSapZpg==",
+  "success": true,
+  "projectFilePath": "C:\\HSE\\IDZ3\\IDZ3\\IDZ3.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\daniil.lapshin\\.nuget\\packages\\system.reactive\\6.0.0-preview.1\\system.reactive.6.0.0-preview.1.nupkg.sha512"
+  ],
+  "logs": []
+}
