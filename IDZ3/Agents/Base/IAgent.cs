@@ -1,4 +1,4 @@
-﻿using IDZ3.Message;
+﻿using IDZ3.MessagesContracts;
 
 namespace IDZ3.Agents.Base
 {

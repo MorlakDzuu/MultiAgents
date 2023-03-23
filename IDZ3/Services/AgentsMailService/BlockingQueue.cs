@@ -17,7 +17,7 @@
         /// <summary>
         /// Добавлет новый элемент в очередь, блокирует поток в случае отсутсвтия места
         /// </summary>
-        public void PushItem( T item )
+        public void Enqueue( T item )
         {
             lock ( queue )
             {
@@ -36,7 +36,7 @@
         /// <summary>
         /// Выдает элемент очереди, блокирует поток в случае отсутвия элементов
         /// </summary>
-        public T PopItem()
+        public T Dequeue()
         {
             lock ( queue )
             {

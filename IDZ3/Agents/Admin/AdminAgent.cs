@@ -1,6 +1,7 @@
 ﻿using IDZ3.Agents.Base;
 using IDZ3.Agents.Store;
-using IDZ3.Message;
+using IDZ3.MessageContracts.Visitor;
+using IDZ3.MessagesContracts;
 using IDZ3.Services.AgentFabric;
 
 namespace IDZ3.Agents.Admin
@@ -13,7 +14,7 @@ namespace IDZ3.Agents.Admin
         // Агент склада, принадлежащий управляющему агенту
         StoreAgent _storeAgent;
 
-        public AdminAgent() : base( "ADMIN", "head" )
+        public AdminAgent() : base( AgentRoles.ADMIN.ToString(), "head" )
         {
             // Создаем агент склада
             _storeAgent = AgentFabric.StoreAgentCreate( Id );
@@ -25,31 +26,18 @@ namespace IDZ3.Agents.Admin
         new public void Action()
         {
             Lock();
-
-            StoreRecieveMessage messageContent = new StoreRecieveMessage( StoreActionTypes.CHECK_PRODUCT, "CARROT", 1, "test" );
-            SendMessageToAgent<StoreRecieveMessage>( messageContent, _storeAgent.Id );
-
-            Message<bool> checkResult = GetMessage<bool>();
-            if ( checkResult.MessageContent )
-            {
-                messageContent.ActionType = StoreActionTypes.RESERVE_PRODUCT;
-                SendMessageToAgent<StoreRecieveMessage>( messageContent, _storeAgent.Id );
-            }
-
-            messageContent.ActionType = StoreActionTypes.CANCEL_PRODUCT;
-            SendMessageToAgent<StoreRecieveMessage>( messageContent, _storeAgent.Id );
-
-            messageContent.ActionType = StoreActionTypes.RESERVE_PRODUCT;
-            SendMessageToAgent<StoreRecieveMessage>( messageContent, _storeAgent.Id );
-
-            StoreRecieveMessage reserseTea = new StoreRecieveMessage( StoreActionTypes.RESERVE_PRODUCT, "TEA", 2, "test" );
-            SendMessageToAgent<StoreRecieveMessage>( reserseTea, _storeAgent.Id );
-
-            StoreRecieveMessage ready = new StoreRecieveMessage( StoreActionTypes.DISH_READY, "", 0, "test" );
-            SendMessageToAgent<StoreRecieveMessage>( ready, _storeAgent.Id );
-
+            Message<VisitorMessage> visitorMessage = GetMessage<VisitorMessage>();
             StopWorking();
             Unlock();
+        }
+
+        private void ProcessVisitorRequest( VisitorMessage message )
+        {
+            switch(message.ActionType)
+            {
+                case ( VisitorActionTypes.MENU_REQUEST ):
+                    break;
+            }
         }
     }
 }

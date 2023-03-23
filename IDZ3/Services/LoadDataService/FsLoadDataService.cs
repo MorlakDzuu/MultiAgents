@@ -1,11 +1,10 @@
-﻿using IDZ3.Services.LogService;
-using System.Text.Json;
+﻿using System.Text.Json;
 
 namespace IDZ3.Services.LoadDataService
 {
     public class FsLoadDataService : IFsLoadDataService
     {
-        public FsLoadDataService( )
+        public FsLoadDataService( ) 
         {
         }
 
@@ -22,7 +21,7 @@ namespace IDZ3.Services.LoadDataService
 
                 return deserializedData;
             }
-            catch ( Exception ex )
+            catch ( Exception )
             {
                 throw;
             }

@@ -54,7 +54,7 @@ namespace IDZ3.Services.AgentFabric
             reserves.Add( "TEA", 10 );
             // -------
 
-            StoreAgent storeAgent = new StoreAgent( "STORE", ownerId, reserves );
+            StoreAgent storeAgent = new StoreAgent( ownerId, reserves );
 
             Thread thread = new Thread( ( StoreAgent ) =>
             {

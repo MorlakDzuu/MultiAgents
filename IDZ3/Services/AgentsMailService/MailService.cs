@@ -1,4 +1,4 @@
-﻿using IDZ3.Message;
+﻿using IDZ3.MessagesContracts;
 using System.Text.Json;
 
 namespace IDZ3.Services.AgentsMailService
@@ -7,7 +7,7 @@ namespace IDZ3.Services.AgentsMailService
     /// Почтовый сервис
     /// Отправялет сообщения от одного агента к другому по Id
     /// </summary>
-    public class MailService : IMailService
+    public class MailService
     {
         // Максимальное количество сообщений в очереди агента
         private readonly int MAX_MESSAGES_FOR_AGENT_IN_QUEUE = 100;
@@ -40,10 +40,6 @@ namespace IDZ3.Services.AgentsMailService
             if ( !mailboxes.ContainsKey( agentId ) )
             {
                 mailboxes.Add( agentId, new BlockingQueue<string>( MAX_MESSAGES_FOR_AGENT_IN_QUEUE ) );
-
-                //----
-                Console.WriteLine( $"MailService: agent registered {agentId}\n\n" );
-                //----
             }
 
             mre.Set();
@@ -66,7 +62,7 @@ namespace IDZ3.Services.AgentsMailService
         {
             RegisterAgentMailbox( agentId );
             BlockingQueue<string> agentMessages = GetAgentQueue( agentId );
-            string messageString = agentMessages.PopItem();
+            string messageString = agentMessages.Dequeue();
 
             try
             {
@@ -93,11 +89,7 @@ namespace IDZ3.Services.AgentsMailService
             Message<T> message = new Message<T>( agentFromId, messageContent );
             string messageString = JsonSerializer.Serialize( message );
             BlockingQueue<string> agentMessages = GetAgentQueue( agentId );
-            agentMessages?.PushItem( messageString );
-
-            //----
-            Console.WriteLine( $"MailService: agent {agentFromId} send a message to {agentId}, message = {messageString}\n\n" );
-            //----
+            agentMessages?.Enqueue( messageString );
         }
 
         /// <summary>

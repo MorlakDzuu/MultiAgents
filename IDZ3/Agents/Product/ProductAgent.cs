@@ -16,7 +16,7 @@ namespace IDZ3.Agents.Product
             string ownerId,
             string productType,
             double productAmount )
-            : base( "PRODUCT", ownerId )
+            : base( AgentRoles.PRODUCT.ToString() , ownerId )
         {
             _productType = productType;
             _productAmount = productAmount;

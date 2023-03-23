@@ -1,4 +1,5 @@
-﻿using IDZ3.Message;
+﻿using IDZ3.MessagesContracts;
+using IDZ3.Services.ActiveAgentsDFService;
 using IDZ3.Services.AgentsMailService;
 
 namespace IDZ3.Agents.Base
@@ -10,6 +11,8 @@ namespace IDZ3.Agents.Base
     {
         // Инстанс почтового сервиса
         private MailService _mailService;
+        // Инстас координатора
+        protected DFService _dFService;
 
         // Средства синхронизации
         private int _done;
@@ -17,13 +20,13 @@ namespace IDZ3.Agents.Base
         ManualResetEvent mre;
 
         // Стандартные свойста агента
-        public string Name { get; private set; }
+        public string ServiceType { get; private set; }
         public string Id { get; private set; }
         public string OwnerId { get; private set; }
 
-        public BaseAgent( string name, string ownerId )
+        public BaseAgent( string serviceType, string ownerId )
         {
-            Name = name;
+            ServiceType = serviceType;
             Id = Guid.NewGuid().ToString();
             OwnerId = ownerId;
 
@@ -35,10 +38,10 @@ namespace IDZ3.Agents.Base
             _mailService = MailService.Instance();
             // Регистрируем свой почтовый ящик
             _mailService.RegisterAgentMailbox( Id );
-
-            // ---
-            Console.WriteLine( $"Created agent: name = {Name}, id = {Id}, owner_id = {OwnerId}\n\n" );
-            // ---
+            // Получаем инстанс координатора
+            _dFService = DFService.GetInstance();
+            // Регистрируемся
+            _dFService.RegisterAgent( AgentProfile.Create( serviceType, Id, ownerId ) );
         }
 
         ~BaseAgent()
@@ -89,10 +92,6 @@ namespace IDZ3.Agents.Base
         {
             Lock();
             _mailService.RemoveAgentMailbox( Id );
-            // ---
-            Console.WriteLine( $"Destroy agent: name = {Name}, id = {Id}, owner_id = {OwnerId}\n\n" );
-            // ---
-
             Interlocked.Exchange( ref _done, 1 );
             Unlock();
         }

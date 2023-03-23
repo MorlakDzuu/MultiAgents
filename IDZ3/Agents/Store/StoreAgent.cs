@@ -1,6 +1,7 @@
 ﻿using IDZ3.Agents.Base;
 using IDZ3.Agents.Product;
-using IDZ3.Message;
+using IDZ3.MessageContracts.Store;
+using IDZ3.MessagesContracts;
 using IDZ3.Services.AgentFabric;
 
 namespace IDZ3.Agents.Store
@@ -15,7 +16,7 @@ namespace IDZ3.Agents.Store
         // Тип продукта - объем остатка
         private Dictionary<string, double> lessProductAmounts;
 
-        public StoreAgent( string name, string ownerId, Dictionary<string, double> reserves ) : base( name, ownerId )
+        public StoreAgent( string ownerId, Dictionary<string, double> reserves ) : base( AgentRoles.STORE.ToString() , ownerId )
         {
             activeProductAgents = new Dictionary<string, List<ProductAgent>>();
             lessProductAmounts = reserves;
