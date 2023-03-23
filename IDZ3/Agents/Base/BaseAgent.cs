@@ -3,7 +3,9 @@ using IDZ3.Services.AgentsMailService;
 
 namespace IDZ3.Agents.Base
 {
-    // Базовый агент
+    /// <summary>
+    /// Базовый агент
+    /// </summary>
     public class BaseAgent : IAgent
     {
         // Инстанс почтового сервиса
@@ -30,9 +32,9 @@ namespace IDZ3.Agents.Base
              mre = new ManualResetEvent( true );
 
             // Получем инстанс почтового сервиса
-            _mailService = MailService.GetInstance();
+            _mailService = MailService.Instance();
             // Регистрируем свой почтовый ящик
-            _mailService.RegisterAgentMail( Id );
+            _mailService.RegisterAgentMailbox( Id );
 
             // ---
             Console.WriteLine( $"Created agent: name = {Name}, id = {Id}, owner_id = {OwnerId}\n\n" );
@@ -44,7 +46,9 @@ namespace IDZ3.Agents.Base
             SelfDestruct();
         }
 
-        // Поведение агента
+        /// <summary>
+        /// Поведение агента
+        /// </summary>
         public void Action()
         {
             Lock();
@@ -52,30 +56,39 @@ namespace IDZ3.Agents.Base
             Unlock();
         }
 
+        /// <summary>
+        /// Нужно ли повторить поведение агента
+        /// </summary>
         public bool Done()
         {
             return 1 == Interlocked.Exchange(ref _done, 0);
         }
 
-        // Приостановить агента
+        /// <summary>
+        /// Приостановить агента
+        /// </summary>
         public void StopWorking()
         {
             Interlocked.Exchange( ref _stop, 1 );
             mre.Reset();
         }
 
-        // Пробуждение агента
+        /// <summary>
+        /// Пробуждение агента
+        /// </summary>
         public void StartWorking()
         {
             Interlocked.Exchange( ref _stop, 0 );
             mre.Set();
         }
 
-        // Самоуничтожение
+        /// <summary>
+        /// Самоуничтожение
+        /// </summary>
         public void SelfDestruct()
         {
             Lock();
-
+            _mailService.RemoveAgentMailbox( Id );
             // ---
             Console.WriteLine( $"Destroy agent: name = {Name}, id = {Id}, owner_id = {OwnerId}\n\n" );
             // ---
@@ -84,13 +97,17 @@ namespace IDZ3.Agents.Base
             Unlock();
         }
 
-        // Получить сообшение по почте
+        /// <summary>
+        /// Получить сообшение по почте
+        /// </summary>
         public Message<T> GetMessage<T>()
         {
             return _mailService.GetNextMessage<T>( Id );
         }
 
-        // Отправить сообщение другому агенту
+        /// <summary>
+        /// Отправить сообщение другому агенту
+        /// </summary>
         public void SendMessageToAgent<T>( T message, string agentId )
         {
             _mailService.SendMessageToAgent<T>( message, Id, agentId );
@@ -101,7 +118,9 @@ namespace IDZ3.Agents.Base
             return Id;
         }
 
-        // Захватить права владения средствами синхронизации
+        /// <summary>
+        /// Захватить права владения средствами синхронизации
+        /// </summary>
         protected void Lock()
         {
             while ( 1 == Interlocked.CompareExchange( ref _stop, _done, 2 ) )
@@ -111,7 +130,9 @@ namespace IDZ3.Agents.Base
             mre.Reset();
         }
 
-        // Отпусть захваченные средства
+        /// <summary>
+        /// Отпусть захваченные средства
+        /// </summary>
         protected void Unlock()
         {
             mre.Set();

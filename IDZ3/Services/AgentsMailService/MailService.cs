@@ -3,61 +3,70 @@ using System.Text.Json;
 
 namespace IDZ3.Services.AgentsMailService
 {
-    public class MailService
+    /// <summary>
+    /// Почтовый сервис
+    /// Отправялет сообщения от одного агента к другому по Id
+    /// </summary>
+    public class MailService : IMailService
     {
+        // Максимальное количество сообщений в очереди агента
         private readonly int MAX_MESSAGES_FOR_AGENT_IN_QUEUE = 100;
 
-        private static MailService malServiceinstance;
-        private static object locker = new();
-        ManualResetEvent mre;
+        // Событие синхронизации потоков
+        private readonly ManualResetEvent mre = new ManualResetEvent( true );
 
-        private Dictionary<string, BlockingQueue<string>> agentsToMessages;
+        // Словарь зарегестрированных агентов
+        private readonly Dictionary<string, BlockingQueue<string>> mailboxes = new Dictionary<string, BlockingQueue<string>>();
+
+        // Инстанс почтового сервиса
+        private static MailService instance = new MailService();
 
         protected MailService()
         {
-            agentsToMessages = new Dictionary<string, BlockingQueue<string>>();
-            mre = new ManualResetEvent( true );
         }
 
-        public static MailService GetInstance()
-        {
-            lock ( locker )
-            {
-                if ( malServiceinstance == null )
-                {
-                    malServiceinstance = new MailService();
-                }
-            }
+        /// <summary>
+        /// Singleton
+        /// </summary>
+        public static MailService Instance() => instance;
 
-            return malServiceinstance;
-        }
-
-        public void RegisterAgentMail( string agentId )
+        /// <summary>
+        /// Регистрация почтовго ящика
+        /// </summary>
+        public void RegisterAgentMailbox( string agentId )
         {
             mre.WaitOne();
-            //if ( !Monitor.TryEnter( locker ) )
-            //{
-            //    Monitor.Wait( locker );
-            //}
 
-            if ( !agentsToMessages.ContainsKey( agentId ) )
+            if ( !mailboxes.ContainsKey( agentId ) )
             {
-                agentsToMessages.Add( agentId, new BlockingQueue<string>( MAX_MESSAGES_FOR_AGENT_IN_QUEUE ) );
+                mailboxes.Add( agentId, new BlockingQueue<string>( MAX_MESSAGES_FOR_AGENT_IN_QUEUE ) );
 
                 //----
                 Console.WriteLine( $"MailService: agent registered {agentId}\n\n" );
                 //----
             }
 
-            //Monitor.Pulse( locker );
             mre.Set();
         }
 
+        public void RemoveAgentMailbox( string agentId )
+        {
+            mre.WaitOne();
+
+            if ( mailboxes.ContainsKey( agentId ) )
+            {
+                mailboxes.Remove( agentId );
+            }
+        }
+
+       /// <summary>
+       /// Позволяет агенту получить следующее сообщение в очереди
+       /// </summary>
         public Message<T> GetNextMessage<T>( string agentId )
         {
-            RegisterAgentMail( agentId );
-            BlockingQueue<string> agentMessages = GetAgentMessages( agentId );
-            string messageString = agentMessages.Dequeue();
+            RegisterAgentMailbox( agentId );
+            BlockingQueue<string> agentMessages = GetAgentQueue( agentId );
+            string messageString = agentMessages.PopItem();
 
             try
             {
@@ -76,34 +85,35 @@ namespace IDZ3.Services.AgentsMailService
             }
         }
 
+        /// <summary>
+        /// Позволяет агенту отправить сообщение другому агенту по Id
+        /// </summary>
         public void SendMessageToAgent<T>( T messageContent, string agentFromId, string agentId )
         {
             Message<T> message = new Message<T>( agentFromId, messageContent );
             string messageString = JsonSerializer.Serialize( message );
-            BlockingQueue<string> agentMessages = GetAgentMessages( agentId );
-            agentMessages?.Enqueue( messageString );
+            BlockingQueue<string> agentMessages = GetAgentQueue( agentId );
+            agentMessages?.PushItem( messageString );
 
             //----
             Console.WriteLine( $"MailService: agent {agentFromId} send a message to {agentId}, message = {messageString}\n\n" );
             //----
         }
 
-        private BlockingQueue<string> GetAgentMessages( string agentId )
+        /// <summary>
+        /// Получить очередь агента
+        /// </summary>
+        private BlockingQueue<string> GetAgentQueue( string agentId )
         {
             mre.WaitOne();
-            //if ( !Monitor.TryEnter( locker ) )
-            //{
-            //    Monitor.Wait( locker );
-            //}
 
-            BlockingQueue<string>? agentMessages = agentsToMessages.GetValueOrDefault( agentId );
+            BlockingQueue<string>? agentMessages = mailboxes.GetValueOrDefault( agentId );
 
             if ( agentMessages == null )
             {
                 throw new Exception( $"Agent with id = {agentId} does not exists\n\n" );
             }
 
-            //Monitor.Pulse( locker );
             mre.Set();
             return agentMessages;
         }

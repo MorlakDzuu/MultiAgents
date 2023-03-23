@@ -1,10 +1,13 @@
 ﻿using IDZ3.Agents.Base;
+using IDZ3.Agents.Product;
 using IDZ3.Message;
 using IDZ3.Services.AgentFabric;
 
 namespace IDZ3.Agents.Store
 {
-    // Агент склада продуктов
+    /// <summary>
+    /// Агент склада продуктов
+    /// </summary>
     public class StoreAgent : BaseAgent
     {
         // Id блюда - Продукт
@@ -18,7 +21,9 @@ namespace IDZ3.Agents.Store
             lessProductAmounts = reserves;
         }
 
-        // Поведение склада
+        /// <summary>
+        /// Поведение склада
+        /// </summary>
         new public void Action()
         {
             Lock();

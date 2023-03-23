@@ -5,7 +5,9 @@ using IDZ3.Services.AgentFabric;
 
 namespace IDZ3.Agents.Admin
 {
-    // Управляющий агент
+    /// <summary>
+    /// Управляющий агент
+    /// </summary>
     public class AdminAgent : BaseAgent
     {
         // Агент склада, принадлежащий управляющему агенту
@@ -17,7 +19,9 @@ namespace IDZ3.Agents.Admin
             _storeAgent = AgentFabric.StoreAgentCreate( Id );
         }
 
-        // Поведение управляющего агента
+        /// <summary>
+        /// Поведение управляющего агента
+        /// </summary>
         new public void Action()
         {
             Lock();

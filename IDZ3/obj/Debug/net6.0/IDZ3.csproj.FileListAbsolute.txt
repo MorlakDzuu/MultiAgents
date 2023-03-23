@@ -15,3 +15,5 @@ C:\HSE\IDZ3\IDZ3\obj\Debug\net6.0\IDZ3.genruntimeconfig.cache
 C:\HSE\IDZ3\IDZ3\obj\Debug\net6.0\ref\IDZ3.dll
 C:\HSE\IDZ3\IDZ3\bin\Debug\net6.0\System.Reactive.dll
 C:\HSE\IDZ3\IDZ3\obj\Debug\net6.0\IDZ3.csproj.CopyComplete
+C:\HSE\IDZ3\IDZ3\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.dll
+C:\HSE\IDZ3\IDZ3\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll

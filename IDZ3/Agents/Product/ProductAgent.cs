@@ -1,8 +1,10 @@
 ﻿using IDZ3.Agents.Base;
 
-namespace IDZ3.Agents
+namespace IDZ3.Agents.Product
 {
-    // Агент продукта
+    /// <summary>
+    /// Агент продукта
+    /// </summary>
     public class ProductAgent : BaseAgent
     {
         // Тип продукта
@@ -20,28 +22,26 @@ namespace IDZ3.Agents
             _productAmount = productAmount;
             _productAmount = productAmount;
         }
-        
-        // Продукт просто существует
-        new public void Action()
-        {
-            Lock();
-            Thread.Sleep( 100 );
-            Unlock();
-        }
 
-        // Получить тип продукта
+        /// <summary>
+        /// Получить тип продукта
+        /// </summary>
         public string GetType()
         {
             return _productType;
         }
 
-        // Установить новый объем продукта
+        /// <summary>
+        /// Установить новый объем продукта
+        /// </summary>
         public void SetAmount( double productAmount )
         {
             _productAmount = productAmount;
         }
-        
-        // Получить текущий объем продукта
+
+        /// <summary>
+        /// Получить текущий объем продукта
+        /// </summary>
         public double GetAmount()
         {
             return _productAmount;

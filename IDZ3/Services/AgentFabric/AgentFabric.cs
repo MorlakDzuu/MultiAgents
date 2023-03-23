@@ -1,6 +1,6 @@
-﻿using IDZ3.Agents;
-using IDZ3.Agents.Admin;
+﻿using IDZ3.Agents.Admin;
 using IDZ3.Agents.Base;
+using IDZ3.Agents.Product;
 using IDZ3.Agents.Store;
 
 namespace IDZ3.Services.AgentFabric
