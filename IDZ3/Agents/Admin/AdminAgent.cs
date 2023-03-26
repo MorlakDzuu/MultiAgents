@@ -13,7 +13,6 @@ using IDZ3.DFs.DFDishCards;
 using IDZ3.DFs.DFEquipment;
 using IDZ3.DFs.DFMenu;
 using IDZ3.MessageContracts.Admin;
-using IDZ3.MessageContracts.Operation;
 using IDZ3.MessageContracts.Order;
 using IDZ3.MessageContracts.Process;
 using IDZ3.MessageContracts.Store;
@@ -198,18 +197,20 @@ namespace IDZ3.Agents.Admin
 
         private void ProcessVisitorRequest( string messageJson, string visitorId )
         {
-            VisitorMessage message = JsonSerializer.Deserialize<VisitorMessage>( messageJson );
+            VisitorAdminMessage message = JsonSerializer.Deserialize<VisitorAdminMessage>( messageJson );
 
             switch ( message.ActionType )
             {
-                case ( VisitorActionTypes.MENU_REQUEST ):
+                case ( VisitorAdminActionTypes.MENU_REQUEST ):
                     menuDishes = _menuAgent.GetActualMenu();
                     List<VisitorMenuDish> visitorMenu = menuDishes.FindAll( d => d.Card.Time < message.TimeLimit )
                         .ConvertAll<VisitorMenuDish>( d => new VisitorMenuDish( d.Id, d.Card.Name, d.Price, d.Card.Time, d.Active ) );
 
-                    SendMessageToAgent<List<VisitorMenuDish>>( visitorMenu, visitorId );
+                    SendMessageToAgent<VisitorRecieveMessage>( VisitorRecieveMessage.CreateVisitorGetMenuRequest( 
+                        ( new VisitorActualMenuMessage( visitorMenu ) ) ), visitorId );
+                    _menuAgent.AddVisitorSubscriber( visitorId );
                     break;
-                case ( VisitorActionTypes.MAKE_ORDER ):
+                case ( VisitorAdminActionTypes.MAKE_ORDER ):
                     List<DishAgent> dishes = new List<DishAgent>();
                     foreach ( int selectedDishId in message.SelectedDishesIds )
                     {
@@ -234,7 +235,7 @@ namespace IDZ3.Agents.Admin
                         dishes.Add( dishAgent );
                     }
                     OrderAgent orderAgent = AgentFabric.OrderAgentCreate( dishes, visitorId, Id );
-                    SendMessageToAgent<string>( orderAgent.Id, visitorId );
+                    //SendMessageToAgent<string>( orderAgent.Id, visitorId );
                     break;
             }
         }

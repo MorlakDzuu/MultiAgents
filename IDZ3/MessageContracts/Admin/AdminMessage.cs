@@ -17,7 +17,7 @@ namespace IDZ3.MessageContracts.Admin
             SerializedData = serializedData;
         }
 
-        public static AdminMessage VisitorCreateAdminMassege( VisitorMessage visitorMessage )
+        public static AdminMessage VisitorCreateAdminMassege( VisitorAdminMessage visitorMessage )
         {
             string jsonMessage = JsonSerializer.Serialize( visitorMessage );
             return new AdminMessage( AgentTypesAdminUnderstand.VISITOR, jsonMessage );

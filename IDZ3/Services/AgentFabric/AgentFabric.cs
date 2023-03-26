@@ -139,11 +139,9 @@ namespace IDZ3.Services.AgentFabric
             }
         }
 
-        public static VisitorAgent VisitorAgentCreate(
-            string ownerId,
-            string adminId )
+        public static VisitorAgent VisitorAgentCreate( string ownerId )
         {
-            VisitorAgent visitorAgent = new VisitorAgent( ownerId, adminId );
+            VisitorAgent visitorAgent = new VisitorAgent( ownerId );
             
             Visitor agent = new Visitor( visitorAgent );
             Thread thread = new Thread( agent.Start );

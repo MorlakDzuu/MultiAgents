@@ -1,6 +1,7 @@
 ﻿using IDZ3.Agents.Base;
 using IDZ3.DFs.DFDishCards;
 using IDZ3.DFs.DFMenu;
+using IDZ3.MessageContracts.Visitor;
 
 namespace IDZ3.Agents.Menu
 {
@@ -10,9 +11,13 @@ namespace IDZ3.Agents.Menu
         private List<DishCard> _dishCards;
         private Dictionary<int, double> _store;
         private ManualResetEvent _storeUpdated;
+        private List<MenuDish> _currentChanges;
+        private List<string> _visitorSsubscribers;
 
         public MenuAgent( string ownerId ) : base( AgentRoles.MENU.ToString(), ownerId )
         {
+            _currentChanges = new List<MenuDish>();
+            _visitorSsubscribers = new List<string>();
             // loaded from file
             _dishCards = DFs.DFDishCards.DFDishCards.GetValue().DishCards;
             _menuDishes = DFs.DFMenu.DFMenu.GetValue().MenuDiches;
@@ -26,8 +31,23 @@ namespace IDZ3.Agents.Menu
             Lock();
             for ( int i = 0; i < _menuDishes.Count; i++ )
             {
-                _menuDishes[ i ].Active = CheckDishActive( _menuDishes[ i ] );
+                bool actual = CheckDishActive( _menuDishes[ i ] );
+                if (_menuDishes[i].Active != actual )
+                {
+                    _menuDishes[ i ].Active = actual;
+                    _currentChanges.Add( _menuDishes[ i ] );
+                }
             }
+            if ( _visitorSsubscribers.Count > 0 )
+            {
+                foreach ( string visitorId in _visitorSsubscribers )
+                {
+                    SendMessageToAgent<VisitorRecieveMessage>( 
+                        VisitorRecieveMessage.CreateVisitorUpdateMenuRequest( new VisitorMenuUpdatesMessage( _currentChanges ) ),
+                        visitorId );
+                }
+            }
+            _currentChanges.Clear();
             _loogger.LogInfo( "MenuAgent: menu updated" );
             _storeUpdated.Reset();
             Unlock();
@@ -49,6 +69,13 @@ namespace IDZ3.Agents.Menu
             Unlock();
 
             return menuDishes;
+        }
+
+        public void AddVisitorSubscriber( string visitorId )
+        {
+            Lock();
+            _visitorSsubscribers.Add( visitorId );
+            Unlock();
         }
 
         private bool CheckDishActive( MenuDish menuDish )

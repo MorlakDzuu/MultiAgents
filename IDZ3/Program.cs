@@ -74,10 +74,8 @@ public class Program
 
         Thread.Sleep( 1000 );
 
-        VisitorAgent visitor = AgentFabric.VisitorAgentCreate( "test", admin.Id );
-
-        Thread.Sleep( 1000 );
-
+        VisitorAgent visitor = AgentFabric.VisitorAgentCreate( "test" );
+        visitor.GetActualMenu( 20 );
         visitor.AddDishToOrder( 28 );
         visitor.AddDishToOrder( 28 );
         visitor.MakeOrder();
