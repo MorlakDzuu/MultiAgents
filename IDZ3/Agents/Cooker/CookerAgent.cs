@@ -119,5 +119,15 @@ namespace IDZ3.Agents.Cooker
             Unlock();
             return count;
         }
+
+        public List<OperationAgent> GetCurrentQueue()
+        {
+            return operationQueue.ToList();
+        }
+
+        public OperationAgent GetCurrentOperation()
+        {
+            return currentOperation;
+        }
     }
 }

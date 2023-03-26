@@ -56,11 +56,31 @@ namespace IDZ3.Agents.Process
                     }
                     break;
                 case ProcessActionType.COUNT_WAIT_TIME:
-                    // TODO: count wait time
-                    break;
-                default:
+                    List<double> times = new List<double>();
+                    foreach ( OperationAgent operation in _operationAgents )
+                    {
+                        CookerAgent cookerAgent = _operationToCooker[ operation.Id ];
+                        EquipmentAgent equipmentAgent = _operationToEquipment[ operation.Id ];
+                        if ( cookerAgent.GetCurrentOperation().Id == operation.Id )
+                        {
+                            int currCooker = equipmentAgent.GetCurrentCookerId();
+                            if ( currCooker == cookerAgent.CookerId )
+                            {
+                                times.Add( operation.GetOperationTime() );
+                            }
+
+                            double time = _operationToCooker.Values.First( c => c.CookerId == currCooker ).GetCurrentOperation().GetOperationTime();
+                            List<int> cookersQueue = equipmentAgent.GetCurrentCookersQueue();
+                            int index = cookersQueue.IndexOf( cookerAgent.CookerId );
+                            for ( int i = 0; i < index; i++ )
+                            {
+
+                            }
+                        }
+                    }
                     break;
             }
+            Unlock();
         }
 
         public void AddOperationAgent( OperationAgent operationAgent )

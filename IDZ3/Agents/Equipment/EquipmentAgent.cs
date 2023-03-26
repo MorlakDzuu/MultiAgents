@@ -1,12 +1,15 @@
 ﻿using IDZ3.Agents.Base;
+using IDZ3.Agents.Operation;
 using IDZ3.DFs.DFEquipment;
 
 namespace IDZ3.Agents.Equipment
 {
     public class EquipmentAgent : OneBehaviorBaseAgent
     {
-        private readonly Queue<int> cookersQueue = new Queue<int>( 100 );
-        public int _currentCookerId;
+        private readonly Queue<int> cookersQueue = new Queue<int>();
+        //private readonly Queue<OperationAgent> operations = new Queue<OperationAgent>();
+        private int _currentCookerId;
+       // private OperationAgent currentOperation;
 
         public int EquipId { get; set; }
         public int EquipType { get; set; }
@@ -26,6 +29,11 @@ namespace IDZ3.Agents.Equipment
         public int GetCurrentCookerId()
         {
             return _currentCookerId;
+        }
+
+        public List<int> GetCurrentCookersQueue()
+        {
+            return cookersQueue.ToList();
         }
 
         public void AddCooker( int cookerId )

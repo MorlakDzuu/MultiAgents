@@ -107,5 +107,10 @@ namespace IDZ3.Agents.Operation
         {
             return _operation.OperProcessId;
         }
+
+        public double GetOperationTime()
+        {
+            return _time;
+        }
     }
 }
