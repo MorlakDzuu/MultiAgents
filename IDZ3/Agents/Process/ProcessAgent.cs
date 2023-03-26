@@ -60,24 +60,43 @@ namespace IDZ3.Agents.Process
                     foreach ( OperationAgent operation in _operationAgents )
                     {
                         CookerAgent cookerAgent = _operationToCooker[ operation.Id ];
-                        EquipmentAgent equipmentAgent = _operationToEquipment[ operation.Id ];
-                        if ( cookerAgent.GetCurrentOperation().Id == operation.Id )
+                        List<OperationAgent> cookerOperationQueue = cookerAgent.GetCurrentQueue();
+                        OperationAgent cookerCurrentOperation = cookerAgent.GetCurrentOperation();
+                        if ( cookerCurrentOperation != null ) {
+                            cookerOperationQueue.Insert( 0, cookerCurrentOperation );
+                        }
+
+                        int cookerIndex = cookerOperationQueue.IndexOf( cookerOperationQueue.First( co => co.Id == operation.Id ) );
+                        double cookerTime = 0;
+                        for ( int i = 0; i <= cookerIndex; i++ )
                         {
-                            int currCooker = equipmentAgent.GetCurrentCookerId();
-                            if ( currCooker == cookerAgent.CookerId )
-                            {
-                                times.Add( operation.GetOperationTime() );
-                            }
+                            cookerTime += cookerOperationQueue[ i ].GetOperationTime();
+                        }
 
-                            double time = _operationToCooker.Values.First( c => c.CookerId == currCooker ).GetCurrentOperation().GetOperationTime();
-                            List<int> cookersQueue = equipmentAgent.GetCurrentCookersQueue();
-                            int index = cookersQueue.IndexOf( cookerAgent.CookerId );
-                            for ( int i = 0; i < index; i++ )
-                            {
+                        EquipmentAgent equipmentAgent = _operationToEquipment[ operation.Id ];
+                        List<OperationAgent> equipmentOperationQueue = equipmentAgent.GetCurrentOperationsQueue();
+                        OperationAgent equipmentCurrentOperation = equipmentAgent.GetCurrentOperationAgent();
+                        if ( equipmentCurrentOperation != null )
+                        {
+                            equipmentOperationQueue.Insert( 0, equipmentCurrentOperation );
+                        }
 
-                            }
+                        int equipmentIndex = equipmentOperationQueue.IndexOf( equipmentOperationQueue.First( equ => equ.Id == operation.Id ) );
+                        double equipmentTime = 0;
+                        for ( int i = 0; i <= equipmentIndex; i++ )
+                        {
+                            equipmentTime += equipmentOperationQueue[ i ].GetOperationTime();
+                        }
+
+                        if ( cookerTime > equipmentTime )
+                        {
+                            times.Add( cookerTime );
+                        } else
+                        {
+                            times.Add( equipmentTime );
                         }
                     }
+                    SendMessageToAgent<OrderRecieveMessage>( OrderRecieveMessage.ProcessWaitTimeMessage( times.Max() ), _orderAgentId );
                     break;
             }
             Unlock();

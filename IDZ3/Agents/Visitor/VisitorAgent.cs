@@ -82,6 +82,7 @@ namespace IDZ3.Agents.Visitor
                     VisitorActualOrderWaitTimeMessage waitTimeMessage =
                         JsonSerializer.Deserialize<VisitorActualOrderWaitTimeMessage>( message.MessageContent.SerializedData );
                     TimeToWait = waitTimeMessage.WaitTime;
+                    _loogger.LogInfo( $"Order wait time {TimeToWait}" );
                     break;
             }
             Unlock();

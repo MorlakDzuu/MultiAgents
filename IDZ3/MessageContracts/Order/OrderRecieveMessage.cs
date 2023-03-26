@@ -27,5 +27,11 @@ namespace IDZ3.MessageContracts.Order
             string jsonMessage = JsonSerializer.Serialize( new OrderDishReadyMessage( dishId ) );
             return new OrderRecieveMessage( OrderActionTypes.DISH_IS_READY, jsonMessage );
         }
+
+        public static OrderRecieveMessage ProcessWaitTimeMessage( double time )
+        {
+            string jsonMessage = time.ToString();
+            return new OrderRecieveMessage( OrderActionTypes.PROCESS_WAIT_TIME, jsonMessage );
+        }
     }
 }

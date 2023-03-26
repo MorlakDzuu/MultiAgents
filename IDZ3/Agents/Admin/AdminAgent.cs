@@ -113,7 +113,7 @@ namespace IDZ3.Agents.Admin
         private EquipmentAgent GetEquipmentForOperation( int type )
         {
             List<EquipmentAgent> activeEquipmentByType = _equipmentAgents.Where( ea => ea.Active && ea.EquipType == type ).ToList();
-            int minCookersCount = activeEquipmentByType[ 0 ].GetCookersCount();
+            int minCookersCount = activeEquipmentByType[ 0 ].GetOperationsCount();
             EquipmentAgent equipForCooker = activeEquipmentByType[ 0 ];
 
             foreach ( EquipmentAgent equipmentAgent in activeEquipmentByType )
@@ -123,9 +123,9 @@ namespace IDZ3.Agents.Admin
                     return equipForCooker;
                 }
 
-                if ( equipmentAgent.GetCookersCount() < minCookersCount )
+                if ( equipmentAgent.GetOperationsCount() < minCookersCount )
                 {
-                    minCookersCount = equipmentAgent.GetCookersCount();
+                    minCookersCount = equipmentAgent.GetOperationsCount();
                     equipForCooker = equipmentAgent;
                 }
             }
@@ -139,7 +139,7 @@ namespace IDZ3.Agents.Admin
             CookerAgent cookerAgent = GetCoookerForOperation();
             EquipmentAgent equipmentAgent = GetEquipmentForOperation( operationAgent.GetEquipmentType() );
 
-            equipmentAgent.AddCooker( cookerAgent.CookerId );
+            equipmentAgent.AddOperation( operationAgent );
             operationAgent.SetEquipmentAgent( equipmentAgent );
             cookerAgent.PerfomOperation( operationAgent );
 

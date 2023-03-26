@@ -6,9 +6,8 @@ namespace IDZ3.Agents.Equipment
 {
     public class EquipmentAgent : OneBehaviorBaseAgent
     {
-        private readonly Queue<int> cookersQueue = new Queue<int>();
-        //private readonly Queue<OperationAgent> operations = new Queue<OperationAgent>();
-        private int _currentCookerId;
+        private readonly Queue<OperationAgent> _operationsQueue = new Queue<OperationAgent>();
+        private OperationAgent _currentOperationAgent;
        // private OperationAgent currentOperation;
 
         public int EquipId { get; set; }
@@ -23,52 +22,52 @@ namespace IDZ3.Agents.Equipment
             Name = equipInfo.Name;
             Active = equipInfo.Active;
 
-            _currentCookerId = -1;
+            _currentOperationAgent = null;
         }
 
-        public int GetCurrentCookerId()
+        public OperationAgent GetCurrentOperationAgent()
         {
-            return _currentCookerId;
+            return _currentOperationAgent;
         }
 
-        public List<int> GetCurrentCookersQueue()
+        public List<OperationAgent> GetCurrentOperationsQueue()
         {
-            return cookersQueue.ToList();
+            return _operationsQueue.ToList();
         }
 
-        public void AddCooker( int cookerId )
+        public void AddOperation( OperationAgent operation )
         {
-            lock ( cookersQueue )
+            lock ( _operationsQueue )
             {
-                if ( _currentCookerId == -1 )
+                if ( _currentOperationAgent == null )
                 {
-                    _currentCookerId = cookerId;
+                    _currentOperationAgent = operation;
                     return;
                 }
 
-                cookersQueue.Enqueue( cookerId );
+                _operationsQueue.Enqueue( operation );
             }
         }
 
         public void CookerFinish()
         {
-            lock ( cookersQueue )
+            lock ( _operationsQueue )
             {
-                if ( cookersQueue.Count == 0 )
+                if ( _operationsQueue.Count == 0 )
                 {
-                    _currentCookerId = -1;
+                    _currentOperationAgent = null;
                     return;
                 }
 
-                _currentCookerId = cookersQueue.Dequeue();
+                _currentOperationAgent = _operationsQueue.Dequeue();
             }
         }
 
-        public int GetCookersCount()
+        public int GetOperationsCount()
         {
-            lock( cookersQueue )
+            lock( _operationsQueue )
             {
-                return cookersQueue.Count + ( _currentCookerId == -1 ? 0 : 1 );
+                return _operationsQueue.Count + ( _currentOperationAgent == null ? 0 : 1 );
             }
         }
     }

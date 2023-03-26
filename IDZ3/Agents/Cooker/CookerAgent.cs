@@ -46,7 +46,7 @@ namespace IDZ3.Agents.Cooker
                         _manualReset.WaitOne();
                     }
                     currentOperation = operationQueue.Dequeue();
-                    while ( currentOperation.GetEquipmentAgent().GetCurrentCookerId() != CookerId )
+                    while ( currentOperation.GetEquipmentAgent().GetCurrentOperationAgent().Id != currentOperation.Id )
                     {
                         Thread.Sleep( 100 );
                     }
