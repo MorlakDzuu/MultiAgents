@@ -5,9 +5,9 @@ namespace IDZ3.DFs.DFCookers
     public class CookersList
     {
         [JsonPropertyName( "cookers" )]
-        public List<Cooker> Cookers { get; set; }
+        public List<CookerRes> Cookers { get; set; }
 
-        public CookersList( List<Cooker> cookers )
+        public CookersList( List<CookerRes> cookers )
         {
             Cookers = cookers;
         }

@@ -16,21 +16,16 @@ namespace IDZ3.DFs.DFDishCards
         [JsonPropertyName( "card_time" )]
         public double Time { get; set; }
 
-        [JsonPropertyName( "equip_type" )]
-        public int Type { get; set; }
-
         [JsonPropertyName( "operations" )]
         public List<Operation> Operations { get; set; }
 
-        public DishCard( int id, string name, string description, double time, int type, List<Operation> operations )
+        public DishCard( int id, string name, string description, double time, List<Operation> operations )
         {
             Id = id;
             Name = name;
             Description = description;
             Time = time;
-            Type = type;
             Operations = operations;
-
         }
     }
 }

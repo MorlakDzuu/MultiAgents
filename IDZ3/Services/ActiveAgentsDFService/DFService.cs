@@ -8,7 +8,7 @@ namespace IDZ3.Services.ActiveAgentsDFService
         public static DFService dbServiceInstance;
 
         private List<AgentProfile> activeAgentsInfo;
-        private List<IAgent> agenInstances;
+        private Dictionary<string, IAgent> agenInstances;
         private object locker;
 
         private LogService loogger = LogService.Instance();
@@ -16,42 +16,42 @@ namespace IDZ3.Services.ActiveAgentsDFService
         protected DFService()
         {
             activeAgentsInfo = new List<AgentProfile>();
-            agenInstances = new List<IAgent>();
+            agenInstances = new Dictionary<string, IAgent>();
             locker = new object();
         }
 
         /// <summary>
         /// Зарегестрировать агента
         /// </summary>
-        public void RegisterAgent( AgentProfile agentDescription )
+        public void RegisterAgent( AgentProfile agentDescription, IAgent agent )
         {
             lock( locker )
             {
-                if ( activeAgentsInfo.Exists( ad => ad.Id == agentDescription.Id ) )
+                if ( !activeAgentsInfo.Exists( ad => ad.Id == agentDescription.Id ) )
                 {
                     activeAgentsInfo.Add( agentDescription );
-                }
+                    agenInstances.Add( agentDescription.Id, agent );
 
-                loogger.LogInfo( $"DFService: user {agentDescription.ServiceType} registered" );
+                    loogger.LogInfo( $"DFService: user {agentDescription.ServiceType} registered" );
+                }
             }
         }
 
         /// <summary>
         /// Удалить записи об агенте
         /// </summary>
-        public void DeregesterAgent( AgentProfile agentDescription )
+        public void DeregesterAgent( string agentId )
         {
             lock ( locker )
             {
-                if( activeAgentsInfo.Exists( ad => ad.Id == agentDescription.Id ) )
+                if( activeAgentsInfo.Exists( ad => ad.Id == agentId ) )
                 {
-                    AgentProfile dFAgent = activeAgentsInfo.First( ad => ad.Id == agentDescription.Id );
+                    AgentProfile dFAgent = activeAgentsInfo.First( ad => ad.Id == agentId );
                     activeAgentsInfo.Remove( dFAgent );
 
-                    IAgent agent = agenInstances.First( ai => ai.GetId() == agentDescription.Id );
-                    agenInstances.Remove( agent );
+                    agenInstances.Remove( agentId );
 
-                    loogger.LogInfo( $"DFService: user {agentDescription.ServiceType} removed" );
+                    loogger.LogInfo( $"DFService: {dFAgent.ServiceType} {agentId} removed" );
                 }
             }
         }
@@ -64,7 +64,7 @@ namespace IDZ3.Services.ActiveAgentsDFService
             IAgent agent;
             lock( locker )
             {
-                agent = agenInstances.FirstOrDefault( ai => ai.GetId() == agentId );
+                agent = agenInstances[agentId];
             }
 
             return agent;

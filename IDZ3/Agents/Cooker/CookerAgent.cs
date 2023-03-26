@@ -1,5 +1,6 @@
 ﻿using IDZ3.Agents.Base;
-using IDZ3.Services.AgentsMailService;
+using IDZ3.Agents.Operation;
+using IDZ3.DFs.DFCookers;
 
 namespace IDZ3.Agents.Cooker
 {
@@ -9,39 +10,77 @@ namespace IDZ3.Agents.Cooker
     public class CookerAgent : BaseAgent
     {
         // Очередь выполнения операций
-        private readonly BlockingQueue<Operation.Operation> operationQueue = new BlockingQueue<Operation.Operation>( 100 );
+        private readonly Queue<OperationAgent> operationQueue = new Queue<OperationAgent>();
         // Очередь остановленных операций
-        private readonly Queue<Operation.Operation> stoppedOperationQueue = new Queue<Operation.Operation>();
+        private readonly Queue<OperationAgent> stoppedOperationQueue = new Queue<OperationAgent>();
 
         // Текущая операция
-        private Operation.Operation currentOperation;
+        private OperationAgent currentOperation;
         // Статус текущей операции
         private CookerOperationStatus currentOperationStatus;
 
-        // Имя повара
-        private readonly string _name;
+        private ManualResetEvent _manualReset;
 
-        public CookerAgent( string name, string ownerId )
+        // Информация о поваре
+        public int CookerId { get; set; }
+        public string Name { get; set; }
+        public bool Active { get; set; }
+
+        public CookerAgent( CookerRes cookerInfo, string ownerId )
             : base( AgentRoles.COOKER.ToString(), ownerId )
         {
-            _name = name;
+            CookerId = cookerInfo.Id;
+            Name = cookerInfo.Name;
+            Active = cookerInfo.Active;
+            currentOperationStatus = CookerOperationStatus.Chilling;
+            _manualReset = new ManualResetEvent( false );
         }
 
-        public void Action()
+        public new void Action()
         {
             Lock();
-            // TODO::
+            switch ( currentOperationStatus ) { 
+                case CookerOperationStatus.Chilling:
+                    if ( operationQueue.Count == 0 )
+                    {
+                        _manualReset.WaitOne();
+                    }
+                    currentOperation = operationQueue.Dequeue();
+                    while ( currentOperation.GetEquipmentAgent().GetCurrentCookerId() != CookerId )
+                    {
+                        Thread.Sleep( 100 );
+                    }
+                    currentOperation.StartOperation();
+                    currentOperationStatus = CookerOperationStatus.StartedTheOperation;
+                    _manualReset.Reset();
+                    break;
+                case CookerOperationStatus.StartedTheOperation:
+                    if ( currentOperation.GetEndDate() <= DateTime.UtcNow )
+                    {
+                        currentOperation.FinishOperation();
+                        currentOperation.GetEquipmentAgent().CookerFinish();
+                        currentOperationStatus = CookerOperationStatus.PerfomedTheOperation;
+                    }
+                    break;
+                case CookerOperationStatus.PerfomedTheOperation:
+                    currentOperation = null;
+                    currentOperationStatus = CookerOperationStatus.Chilling;
+                    break;
+            }
+
             Unlock();
         }
 
         /// <summary>
         /// Назначение новой операции
         /// </summary>
-        public void PerfomOperation( Operation.Operation operation )
+        public void PerfomOperation( OperationAgent operation )
         {
             Lock();
+            operation.SetCookerId( CookerId );
             operationQueue.Enqueue( operation );
             Unlock();
+            _manualReset.Set();
         }
 
         /// <summary>
@@ -69,6 +108,16 @@ namespace IDZ3.Agents.Cooker
                 operationQueue.Enqueue( stoppedOperationQueue.Dequeue() );
             }
             Unlock();
+        }
+
+        public int GetOperationCount()
+        {
+            int count = 0;
+            Lock();
+            count = currentOperation == null ? 0 : 1;
+            count += operationQueue.Count;
+            Unlock();
+            return count;
         }
     }
 }

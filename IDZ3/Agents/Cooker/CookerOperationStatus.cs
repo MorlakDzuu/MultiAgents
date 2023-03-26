@@ -20,6 +20,8 @@
         /// <summary>
         /// Оперция остановлена высшим начальством
         /// </summary>
-        OperationStopped = 3
+        OperationStopped = 3,
+
+        Chilling = 4
     }
 }

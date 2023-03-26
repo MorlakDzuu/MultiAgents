@@ -11,6 +11,9 @@
 
         MENU,
         COOKER,
-        OPERATION
+        EQUIPMENT,
+        OPERATION,
+        ORDER,
+        PROCESS
     }
 }

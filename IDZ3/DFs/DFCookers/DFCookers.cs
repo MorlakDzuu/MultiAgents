@@ -2,7 +2,7 @@
 {
     public class DFCookers
     {
-        private static CookersList _cookers;
+        public static CookersList _cookers;
 
         public static void SetValue( CookersList cookers )
         {

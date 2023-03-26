@@ -6,19 +6,22 @@
     public class StoreRecieveMessage
     {
         public StoreActionTypes ActionType { get; set; }
-        public string ProductType { get; set; }
+        public int ProductType { get; set; }
         public double ProductAmount { get; set; }
+        public string OrderAgentId { get; set; }
         public string DishAgentId { get; set; }
 
         public StoreRecieveMessage(
             StoreActionTypes actionType,
-            string productType,
+            int productType,
             double productAmount,
+            string orderAgentId,
             string dishAgentId )
         {
             ActionType = actionType;
             ProductType = productType;
             ProductAmount = productAmount;
+            OrderAgentId = orderAgentId;
             DishAgentId = dishAgentId;
         }
     }

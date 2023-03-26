@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using IDZ3.DFs.DFDishCards;
+using System.Text.Json.Serialization;
 
 namespace IDZ3.DFs.DFMenu
 {
@@ -8,7 +9,7 @@ namespace IDZ3.DFs.DFMenu
         public int Id { get; set; }
         
         [JsonPropertyName( "menu_dish_card" )]
-        public int Card { get; set; }
+        public int CardId { get; set; }
 
         [JsonPropertyName( "menu_dish_price" )]
         public double Price { get; set; }
@@ -16,10 +17,13 @@ namespace IDZ3.DFs.DFMenu
         [JsonPropertyName( "menu_dish_active" )]
         public bool Active { get; set; }
 
-        public MenuDish( int id, int card, double price, bool active )
+        [JsonIgnore]
+        public DishCard? Card { get; set; }
+
+        public MenuDish( int id, int cardId, double price, bool active )
         {
             Id = id;
-            Card = card;
+            CardId = cardId;
             Price = price;
             Active = active;
         }

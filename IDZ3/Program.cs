@@ -1,4 +1,6 @@
-﻿using IDZ3.DFs.DFCookers;
+﻿using IDZ3.Agents.Admin;
+using IDZ3.Agents.Visitor;
+using IDZ3.DFs.DFCookers;
 using IDZ3.DFs.DFDishCards;
 using IDZ3.DFs.DFEquipment;
 using IDZ3.DFs.DFEquipmentType;
@@ -7,7 +9,9 @@ using IDZ3.DFs.DFOperations;
 using IDZ3.DFs.DFProducts;
 using IDZ3.DFs.DFProductTypes;
 using IDZ3.DFs.DFVisitors;
+using IDZ3.Services.AgentFabric;
 using IDZ3.Services.LoadDataService;
+using IDZ3.Services.SourceLogService;
 using Microsoft.Extensions.DependencyInjection;
 
 public class Program
@@ -63,11 +67,22 @@ public class Program
     
     public static void Main()
     {
-        //AgentFabric.AdminAgentCreate();
-
+  
         LoadFiles();
 
-        Thread.Sleep( 5000 );
-        //LogService.Instance().WriteLogs();
+        AdminAgent admin = AgentFabric.AdminAgentCreate();
+
+        Thread.Sleep( 1000 );
+
+        VisitorAgent visitor = AgentFabric.VisitorAgentCreate( "test", admin.Id );
+
+        Thread.Sleep( 1000 );
+
+        visitor.AddDishToOrder( 28 );
+        visitor.AddDishToOrder( 28 );
+        visitor.MakeOrder();
+
+        Thread.Sleep( 10000 );
+        LogService.Instance().WriteLogs();
     }
 }

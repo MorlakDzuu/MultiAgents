@@ -4,6 +4,9 @@ namespace IDZ3.DFs.DFEquipment
 {
     public class Oper
     {
+        [JsonPropertyName( "equip_id" )]
+        public int Id { get; set; }
+
         [JsonPropertyName( "equip_type" )]
         public int Type { get; set; }
         
@@ -13,8 +16,9 @@ namespace IDZ3.DFs.DFEquipment
         [JsonPropertyName( "equip_active" )]
         public bool Active { get; set; }
 
-        public Oper( int type, string name, bool active )
+        public Oper( int id, int type, string name, bool active )
         {
+            Id = id;
             Type = type;
             Name = name;
             Active = active;

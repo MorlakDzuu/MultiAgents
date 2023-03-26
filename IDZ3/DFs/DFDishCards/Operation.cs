@@ -6,7 +6,10 @@ namespace IDZ3.DFs.DFDishCards
     {
         [JsonPropertyName( "oper_type" )]
         public int Type { get; set; }
-        
+
+        [JsonPropertyName( "equip_type" )]
+        public int EquipType { get; set; }
+
         [JsonPropertyName( "oper_time" )]
         public double Time { get; set; }
 
@@ -16,9 +19,10 @@ namespace IDZ3.DFs.DFDishCards
         [JsonPropertyName( "oper_products" )]
         public List<Prod> Products { get; set; }
 
-        public Operation( int type, double time, int asyncPoint, List<Prod> products )
+        public Operation( int type, int equipType, double time, int asyncPoint, List<Prod> products )
         {
             Type = type;
+            EquipType = equipType;
             Time = time;
             AsyncPoint = asyncPoint;
             Products = products;

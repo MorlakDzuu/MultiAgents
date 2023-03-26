@@ -1,6 +1,7 @@
 ﻿using IDZ3.MessagesContracts;
 using IDZ3.Services.ActiveAgentsDFService;
 using IDZ3.Services.AgentsMailService;
+using IDZ3.Services.SourceLogService;
 
 namespace IDZ3.Agents.Base
 {
@@ -14,10 +15,12 @@ namespace IDZ3.Agents.Base
         // Инстас координатора
         protected DFService _dFService;
 
+        protected LogService _loogger;
+
         // Средства синхронизации
         private int _done;
         private int _stop;
-        ManualResetEvent mre;
+        private ManualResetEvent mre;
 
         // Стандартные свойста агента
         public string ServiceType { get; private set; }
@@ -34,6 +37,7 @@ namespace IDZ3.Agents.Base
             _done = 0;
              mre = new ManualResetEvent( true );
 
+            _loogger = LogService.Instance();
             // Получем инстанс почтового сервиса
             _mailService = MailService.Instance();
             // Регистрируем свой почтовый ящик
@@ -41,7 +45,7 @@ namespace IDZ3.Agents.Base
             // Получаем инстанс координатора
             _dFService = DFService.GetInstance();
             // Регистрируемся
-            _dFService.RegisterAgent( AgentProfile.Create( serviceType, Id, ownerId ) );
+            _dFService.RegisterAgent( AgentProfile.Create( serviceType, Id, ownerId ), this );
         }
 
         ~BaseAgent()
@@ -92,6 +96,7 @@ namespace IDZ3.Agents.Base
         {
             Lock();
             _mailService.RemoveAgentMailbox( Id );
+            _dFService.DeregesterAgent( Id );
             Interlocked.Exchange( ref _done, 1 );
             Unlock();
         }

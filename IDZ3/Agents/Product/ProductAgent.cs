@@ -1,32 +1,49 @@
 ﻿using IDZ3.Agents.Base;
+using IDZ3.MessageContracts.Order;
+using IDZ3.MessageContracts.Product;
 
 namespace IDZ3.Agents.Product
 {
     /// <summary>
     /// Агент продукта
     /// </summary>
-    public class ProductAgent : BaseAgent
+    public class ProductAgent : OneBehaviorBaseAgent
     {
+        string _dishId;
+        string _orderId;
         // Тип продукта
-        string _productType;
+        int _productType;
         // Объем продукта
         double _productAmount;
 
+        private ManualResetEvent _manualReset;
+
         public ProductAgent(
             string ownerId,
-            string productType,
-            double productAmount )
+            string dishId,
+            string orderId,
+            int productType )
             : base( AgentRoles.PRODUCT.ToString() , ownerId )
         {
+            _dishId = dishId;
+            _orderId = orderId;
             _productType = productType;
-            _productAmount = productAmount;
-            _productAmount = productAmount;
+            _productAmount = 0;
+            _manualReset = new ManualResetEvent( false );
+        }
+
+        public void Action()
+        {
+            _manualReset.WaitOne();
+            bool reserveResult = _productAmount > 0;
+            ProductReserveResult productReserveResult = new ProductReserveResult( _dishId, _productType, _productAmount, reserveResult );
+            SendMessageToAgent<OrderRecieveMessage>( OrderRecieveMessage.ProductReserveMessage( productReserveResult ), _orderId );
         }
 
         /// <summary>
         /// Получить тип продукта
         /// </summary>
-        public string GetType()
+        public int GetProductType()
         {
             return _productType;
         }
@@ -45,6 +62,11 @@ namespace IDZ3.Agents.Product
         public double GetAmount()
         {
             return _productAmount;
+        }
+
+        public void Reserve()
+        {
+            _manualReset.Set();
         }
     }
 }

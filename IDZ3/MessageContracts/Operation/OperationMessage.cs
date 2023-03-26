@@ -2,16 +2,17 @@
 {
     public class OperationMessage
     {
-        public OperationActionTypes ActionType { get; set; }
-        public Agents.Operation.Operation Oper { get; set; }
+        //public OperationActionTypes ActionType { get; set; }
+        public int OperType { get; set; }
+        public int EquipType { get; set; }
 
-        public OperationMessage( OperationActionTypes actionType, Agents.Operation.Operation oper )
+        public OperationMessage( int operType, int equipType )
         {
-            ActionType = actionType;
-            Oper = oper;
+            OperType = operType;
+            EquipType = equipType;
         }
 
-        public static OperationMessage Create( Agents.Operation.Operation operation ) 
-            => new OperationMessage( OperationActionTypes.RESERVE_COOKER_AND_EQUIP, operation );
+        public static OperationMessage Create( int operType, int equipType ) 
+            => new OperationMessage( operType, equipType );
     }
 }
