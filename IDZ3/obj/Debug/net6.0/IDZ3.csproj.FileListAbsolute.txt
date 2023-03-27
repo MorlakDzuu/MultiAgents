@@ -17,3 +17,12 @@ C:\HSE\IDZ3\IDZ3\bin\Debug\net6.0\System.Reactive.dll
 C:\HSE\IDZ3\IDZ3\obj\Debug\net6.0\IDZ3.csproj.CopyComplete
 C:\HSE\IDZ3\IDZ3\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.dll
 C:\HSE\IDZ3\IDZ3\bin\Debug\net6.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\HSE\IDZ3\IDZ3\bin\Debug\net6.0\Microsoft.Extensions.Configuration.dll
+C:\HSE\IDZ3\IDZ3\bin\Debug\net6.0\Microsoft.Extensions.Configuration.Abstractions.dll
+C:\HSE\IDZ3\IDZ3\bin\Debug\net6.0\Microsoft.Extensions.Configuration.FileExtensions.dll
+C:\HSE\IDZ3\IDZ3\bin\Debug\net6.0\Microsoft.Extensions.Configuration.Json.dll
+C:\HSE\IDZ3\IDZ3\bin\Debug\net6.0\Microsoft.Extensions.Configuration.UserSecrets.dll
+C:\HSE\IDZ3\IDZ3\bin\Debug\net6.0\Microsoft.Extensions.FileProviders.Abstractions.dll
+C:\HSE\IDZ3\IDZ3\bin\Debug\net6.0\Microsoft.Extensions.FileProviders.Physical.dll
+C:\HSE\IDZ3\IDZ3\bin\Debug\net6.0\Microsoft.Extensions.FileSystemGlobbing.dll
+C:\HSE\IDZ3\IDZ3\bin\Debug\net6.0\Microsoft.Extensions.Primitives.dll

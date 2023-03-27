@@ -1,4 +1,8 @@
-﻿namespace IDZ3.Services.SourceLogService
+﻿using IDZ3.Agents.Operation;
+using IDZ3.Agents.Process;
+using System.Text.Json;
+
+namespace IDZ3.Services.SourceLogService
 {
     /// <summary>
     /// Сервис логирования
@@ -7,6 +11,8 @@
     {
         // Очередь логов
         private readonly Queue<LogItem> queue = new Queue<LogItem>();
+        private readonly Queue<Process> processLogQueue = new Queue<Process>();
+        private readonly Queue<Operation> operationLogQueue = new Queue<Operation>();
 
         // Инстанс сервиса логирования
         private static LogService instance = new LogService ();
@@ -39,6 +45,62 @@
         public void LogError( string message )
         {
             Log( LogLevel.ERROR, message );
+        }
+
+        public void AddProcessLog( Process process )
+        {
+            lock( processLogQueue )
+            {
+                processLogQueue.Enqueue( process );
+            }
+        } 
+
+        public void AddOperationLog( Operation operation )
+        {
+            lock( operationLogQueue )
+            {
+                operationLogQueue.Enqueue( operation );
+            }
+        }
+
+        public async void StoreProcessLogsAsync( string filePath )
+        {
+            try
+            {
+                JsonSerializerOptions options = new JsonSerializerOptions() { WriteIndented = true };
+                string processLogsJson = JsonSerializer.Serialize( processLogQueue.ToList(), options );
+                StreamWriter sw = new StreamWriter( filePath );
+                await sw.WriteLineAsync( processLogsJson );
+                sw.Close();
+            } catch ( Exception ex )
+            {
+                LogError( $"Can't store process logs to file {filePath}; exception : {ex.Message}" );
+            }
+        }
+
+        public async void StoreOperationLogsAsync( string filePath )
+        {
+            try
+            {
+                JsonSerializerOptions options = new JsonSerializerOptions() { WriteIndented = true };
+                string processLogsJson = JsonSerializer.Serialize( operationLogQueue.ToList(), options );
+                StreamWriter sw = new StreamWriter( filePath );
+                await sw.WriteLineAsync( processLogsJson );
+                sw.Close();
+            }
+            catch ( Exception ex )
+            {
+                LogError( $"Can't store process logs to file {filePath}; exception : {ex.Message}" );
+            }
+        }
+
+        public async void StoreLogs( string filePath )
+        {
+            JsonSerializerOptions options = new JsonSerializerOptions() { WriteIndented = true };
+            string processLogsJson = JsonSerializer.Serialize( queue.ToList(), options );
+            StreamWriter sw = new StreamWriter( filePath );
+            await sw.WriteLineAsync( processLogsJson );
+            sw.Close();
         }
 
         public void WriteLogs()

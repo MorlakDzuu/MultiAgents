@@ -109,5 +109,12 @@ namespace IDZ3.Agents.Store
                 }
             Unlock();
         }
+
+        public new void SelfDiscruct()
+        {
+            activeProductAgents.Values.ToList().SelectMany( p => p ).ToList().ForEach( p => p.SelfDestruct() );
+            activeProductAgents.Clear();
+            base.SelfDestruct();
+        }
     }
 }

@@ -64,12 +64,12 @@ namespace IDZ3.Agents.Operation
             _operation.OperEnded = DateTime.UtcNow;
             _operation.OperActive = false;
             SendMessageToAgent<ProcessRecieveMessage>( ProcessRecieveMessage.ProcessOperationFinished(), _operation.OperProcessId );
-            _loogger.LogInfo( JsonSerializer.Serialize( _operation ) );
+            _loogger.AddOperationLog( _operation );
         }
 
         public DateTime? GetEndDate()
         {
-            return _operation.OperStarted?.AddSeconds( _time * 10 );
+            return _operation.OperStarted?.AddSeconds( _time );
         }
 
         public void Activate()

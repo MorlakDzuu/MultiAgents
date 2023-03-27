@@ -1,4 +1,5 @@
-﻿using IDZ3.Agents.Admin;
+﻿using IDZ3;
+using IDZ3.Agents.Admin;
 using IDZ3.Agents.Visitor;
 using IDZ3.DFs.DFCookers;
 using IDZ3.DFs.DFDishCards;
@@ -16,9 +17,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 public class Program
 {
-    const string path = "C:\\HSE\\IDZ3\\test_files\\";
-
-    public static void LoadFiles()
+    public static void LoadFiles( string pathInput )
     {
         var serviceProvider = new ServiceCollection()
             .AddScoped<IFsLoadDataService, FsLoadDataService>()
@@ -27,39 +26,39 @@ public class Program
         IFsLoadDataService fsLoadDataService = serviceProvider.GetService<IFsLoadDataService>();
 
         // Install operation_types
-        OperationList kitchenOperationTypes = fsLoadDataService.LoadDataAsync<OperationList>( path + "operation_types.txt" ).Result;
+        OperationList kitchenOperationTypes = fsLoadDataService.LoadDataAsync<OperationList>( pathInput + "operation_types.txt" ).Result;
         DFOperation.SetValue( kitchenOperationTypes );
 
         // Install cookers
-        CookersList cookersList = fsLoadDataService.LoadDataAsync<CookersList>( path + "cookers.txt" ).Result;
+        CookersList cookersList = fsLoadDataService.LoadDataAsync<CookersList>( pathInput + "cookers.txt" ).Result;
         DFCookers.SetValue( cookersList );
 
         // Install equipment
-        EquipmentList equipmentList = fsLoadDataService.LoadDataAsync<EquipmentList>( path + "equipment.txt" ).Result;
+        EquipmentList equipmentList = fsLoadDataService.LoadDataAsync<EquipmentList>( pathInput + "equipment.txt" ).Result;
         DFEquipment.SetValue( equipmentList );
 
         // Install equipment_type
-        EquipmentTypeList equipmentTypeList = fsLoadDataService.LoadDataAsync<EquipmentTypeList>( path + "equipment_type.txt" ).Result;
+        EquipmentTypeList equipmentTypeList = fsLoadDataService.LoadDataAsync<EquipmentTypeList>( pathInput + "equipment_type.txt" ).Result;
         DFEquipmentType.SetValue( equipmentTypeList );
 
         // Install products
-        ProductList productList = fsLoadDataService.LoadDataAsync<ProductList>( path + "products.txt" ).Result;
+        ProductList productList = fsLoadDataService.LoadDataAsync<ProductList>( pathInput + "products.txt" ).Result;
         DFProducts.SetValue( productList );
 
         // Install products_types
-        ProductTypeList productTypeList = fsLoadDataService.LoadDataAsync<ProductTypeList>( path + "product_types.txt" ).Result;
+        ProductTypeList productTypeList = fsLoadDataService.LoadDataAsync<ProductTypeList>( pathInput + "product_types.txt" ).Result;
         DFProductTypes.SetValue( productTypeList );
 
         // Install dish_cards
-        DishCardList dishCardList = fsLoadDataService.LoadDataAsync<DishCardList>( path + "dish_cards.txt" ).Result;
+        DishCardList dishCardList = fsLoadDataService.LoadDataAsync<DishCardList>( pathInput + "dish_cards.txt" ).Result;
         DFDishCards.SetValue( dishCardList );
 
         // Install menu_dishes
-        Menu menu = fsLoadDataService.LoadDataAsync<Menu>( path + "menu_dishes.txt" ).Result;
+        Menu menu = fsLoadDataService.LoadDataAsync<Menu>( pathInput + "menu_dishes.txt" ).Result;
         DFMenu.SetValue( menu );
 
         // Install visitors_orders
-        VisitorOrderList visitorOrderList = fsLoadDataService.LoadDataAsync<VisitorOrderList>( path + "visitors_orders.txt" ).Result;
+        VisitorOrderList visitorOrderList = fsLoadDataService.LoadDataAsync<VisitorOrderList>( pathInput + "visitors_orders.txt" ).Result;
         DFVisitors.SetValue( visitorOrderList );
 
         Console.WriteLine();
@@ -67,20 +66,33 @@ public class Program
     
     public static void Main()
     {
-  
-        LoadFiles();
+        const string pathInput = "C:\\HSE\\IDZ3\\test_files\\";
+        const string pathOutput = "C:\\HSE\\IDZ3\\output\\";
 
-        AdminAgent admin = AgentFabric.AdminAgentCreate();
+        try
+        {
+            LoadFiles( pathInput );
+        } 
+        catch( Exception ex ) {
+            LogService.Instance().LogError( $"Can't load files, exception: {ex.Message}" );
+        }
 
-        Thread.Sleep( 1000 );
 
-        VisitorAgent visitor = AgentFabric.VisitorAgentCreate( "test" );
-        visitor.GetActualMenu( 20 );
-        visitor.AddDishToOrder( 28 );
-        visitor.AddDishToOrder( 28 );
-        visitor.MakeOrder();
+        CafeBuilder cafeBuilder = new CafeBuilder( pathOutput );
+        cafeBuilder.VisitorGroupsNumber = 2;
+        cafeBuilder.Interval = 2000;
+        cafeBuilder.AdminExistsTime = 20000;
 
-        Thread.Sleep( 10000 );
-        LogService.Instance().WriteLogs();
+        cafeBuilder.BuildAdmin();
+        cafeBuilder.BuildVisiors();
+
+        try
+        {
+            LogService.Instance().StoreLogs( pathOutput + "logs.txt" );
+        } 
+        catch( Exception ex )
+        {
+            Console.WriteLine($"Exception while store logs: {ex.Message}");
+        }
     }
 }

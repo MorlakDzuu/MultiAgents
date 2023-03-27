@@ -86,7 +86,6 @@ namespace IDZ3.Services.AgentFabric
             }
         }
 
-        // TODO: reserves from file
         public static StoreAgent StoreAgentCreate(
             string ownerId,
             MenuAgent menuAgent,

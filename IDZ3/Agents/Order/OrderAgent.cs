@@ -43,6 +43,9 @@ namespace IDZ3.Agents.Order
                     {
                         _dishAgents.First( da => da.Id == productReserveResult.DishAgentId ).AddProductAgentId( message.AgentFromId );
                         _reservedProductIds.Add( message.AgentFromId );
+                    } else
+                    {
+
                     }
                     if ( _productsToReserve.Count == _reservedProductIds.Count ) {
                         SendMessageToAgent<OrderRecieveMessage>( OrderRecieveMessage.ProductsReservesMessage(), Id );

@@ -239,5 +239,14 @@ namespace IDZ3.Agents.Admin
                     break;
             }
         }
+
+        public new void SelfDestruct()
+        {
+            _cookerAgents.ForEach( ca => ca.SelfDestruct() );
+            _equipmentAgents.ForEach( ea => ea.SelfDestruct() );
+            _storeAgent.SelfDestruct();
+            _menuAgent.SelfDestruct();
+            base.SelfDestruct();
+        }
     }
 }

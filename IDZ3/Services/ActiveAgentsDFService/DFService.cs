@@ -31,8 +31,6 @@ namespace IDZ3.Services.ActiveAgentsDFService
                 {
                     activeAgentsInfo.Add( agentDescription );
                     agenInstances.Add( agentDescription.Id, agent );
-
-                    loogger.LogInfo( $"DFService: user {agentDescription.ServiceType} registered" );
                 }
             }
         }
@@ -50,8 +48,6 @@ namespace IDZ3.Services.ActiveAgentsDFService
                     activeAgentsInfo.Remove( dFAgent );
 
                     agenInstances.Remove( agentId );
-
-                    loogger.LogInfo( $"DFService: {dFAgent.ServiceType} {agentId} removed" );
                 }
             }
         }

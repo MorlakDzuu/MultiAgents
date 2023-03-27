@@ -1,11 +1,20 @@
 {
   "version": 2,
-  "dgSpecHash": "T91vzVkESClf4R+4uxGavVjtEUfoYW2cXAR5mWuFO0ubaji3PAs+u6hVlM3LjgSeHb7iFCcZXWiTRkMp+CJbCQ==",
+  "dgSpecHash": "JWn6NVh2ak2R5q0K3kIeKOFB5rR3Ami3Wi+Tr2SynOMEvMIRhxbJnRnea274YigisH//VR6L6P7I34ra80o5pg==",
   "success": true,
   "projectFilePath": "C:\\HSE\\IDZ3\\IDZ3\\IDZ3.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\daniil.lapshin\\.nuget\\packages\\microsoft.extensions.configuration\\5.0.0\\microsoft.extensions.configuration.5.0.0.nupkg.sha512",
+    "C:\\Users\\daniil.lapshin\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\5.0.0\\microsoft.extensions.configuration.abstractions.5.0.0.nupkg.sha512",
+    "C:\\Users\\daniil.lapshin\\.nuget\\packages\\microsoft.extensions.configuration.fileextensions\\5.0.0\\microsoft.extensions.configuration.fileextensions.5.0.0.nupkg.sha512",
+    "C:\\Users\\daniil.lapshin\\.nuget\\packages\\microsoft.extensions.configuration.json\\5.0.0\\microsoft.extensions.configuration.json.5.0.0.nupkg.sha512",
+    "C:\\Users\\daniil.lapshin\\.nuget\\packages\\microsoft.extensions.configuration.usersecrets\\5.0.0\\microsoft.extensions.configuration.usersecrets.5.0.0.nupkg.sha512",
     "C:\\Users\\daniil.lapshin\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\8.0.0-preview.2.23128.3\\microsoft.extensions.dependencyinjection.8.0.0-preview.2.23128.3.nupkg.sha512",
     "C:\\Users\\daniil.lapshin\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.0-preview.2.23128.3\\microsoft.extensions.dependencyinjection.abstractions.8.0.0-preview.2.23128.3.nupkg.sha512",
+    "C:\\Users\\daniil.lapshin\\.nuget\\packages\\microsoft.extensions.fileproviders.abstractions\\5.0.0\\microsoft.extensions.fileproviders.abstractions.5.0.0.nupkg.sha512",
+    "C:\\Users\\daniil.lapshin\\.nuget\\packages\\microsoft.extensions.fileproviders.physical\\5.0.0\\microsoft.extensions.fileproviders.physical.5.0.0.nupkg.sha512",
+    "C:\\Users\\daniil.lapshin\\.nuget\\packages\\microsoft.extensions.filesystemglobbing\\5.0.0\\microsoft.extensions.filesystemglobbing.5.0.0.nupkg.sha512",
+    "C:\\Users\\daniil.lapshin\\.nuget\\packages\\microsoft.extensions.primitives\\5.0.0\\microsoft.extensions.primitives.5.0.0.nupkg.sha512",
     "C:\\Users\\daniil.lapshin\\.nuget\\packages\\system.reactive\\6.0.0-preview.1\\system.reactive.6.0.0-preview.1.nupkg.sha512"
   ],
   "logs": []

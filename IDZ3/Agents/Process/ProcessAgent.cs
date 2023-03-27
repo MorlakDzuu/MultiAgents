@@ -42,6 +42,7 @@ namespace IDZ3.Agents.Process
                         SendMessageToAgent<ProcessRecieveMessage>( ProcessRecieveMessage.ProcessCountWaitTime(), Id );
                     }
                     break;
+
                 case ProcessActionType.OPERATION_FINISHED:
                     OperationAgent operationAgent = _operationAgents.First( oa => oa.Id == message.AgentFromId );
                     operationAgent.SelfDestruct();
@@ -51,10 +52,11 @@ namespace IDZ3.Agents.Process
                     {
                         _processInfo.ProcessEnded = DateTime.UtcNow;
                         _processInfo.ProcessActive = false;
-                        _loogger.LogInfo( JsonSerializer.Serialize( _processInfo ) );
+                        _loogger.AddProcessLog( _processInfo );
                         SendMessageToAgent<OrderRecieveMessage>( OrderRecieveMessage.OrderDishIsReadyMessage( _processInfo.OrderDishId ), _orderAgentId );
                     }
                     break;
+
                 case ProcessActionType.COUNT_WAIT_TIME:
                     List<double> times = new List<double>();
                     foreach ( OperationAgent operation in _operationAgents )
